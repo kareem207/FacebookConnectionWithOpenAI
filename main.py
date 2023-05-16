@@ -1,10 +1,11 @@
 from flask import Flask, request
 import requests
+import os
 
 app = Flask(__name__)
 
-VERIFY_TOKEN = "EAATX1hnpKjsBAGxz2ozYiFYgZBURM7AV2KhqI07rrnPXFH3FuYKprT1uR5RplOCcJYVeHZBdjj8cT9lwignqYxpT8GTGZBv1OYuTlB7ZA5fwsbtVdZAZAR7km0gm4kmCVZCy4Q15KQwGIRZCyZATYZCXtbZBpooKTOKRAhKsEJLAkvoaZBxSXtTAVJ9Y"
-PAGE_ACCESS_TOKEN = "EAATX1hnpKjsBAGxz2ozYiFYgZBURM7AV2KhqI07rrnPXFH3FuYKprT1uR5RplOCcJYVeHZBdjj8cT9lwignqYxpT8GTGZBv1OYuTlB7ZA5fwsbtVdZAZAR7km0gm4kmCVZCy4Q15KQwGIRZCyZATYZCXtbZBpooKTOKRAhKsEJLAkvoaZBxSXtTAVJ9Y"
+VERIFY_TOKEN = os.environ["VERIFY_TOKEN"]
+PAGE_ACCESS_TOKEN = os.environ["PAGE_ACCESS_TOKEN"]
 
 @app.route('/', methods=['GET'])
 def verify():
