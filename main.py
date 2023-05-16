@@ -1,13 +1,49 @@
-from flask import Flask, jsonify
-import os
+from flask import Flask, request
+import requests
 
 app = Flask(__name__)
 
+VERIFY_TOKEN = "EAATX1hnpKjsBAGxz2ozYiFYgZBURM7AV2KhqI07rrnPXFH3FuYKprT1uR5RplOCcJYVeHZBdjj8cT9lwignqYxpT8GTGZBv1OYuTlB7ZA5fwsbtVdZAZAR7km0gm4kmCVZCy4Q15KQwGIRZCyZATYZCXtbZBpooKTOKRAhKsEJLAkvoaZBxSXtTAVJ9Y"
+PAGE_ACCESS_TOKEN = "EAATX1hnpKjsBAGxz2ozYiFYgZBURM7AV2KhqI07rrnPXFH3FuYKprT1uR5RplOCcJYVeHZBdjj8cT9lwignqYxpT8GTGZBv1OYuTlB7ZA5fwsbtVdZAZAR7km0gm4kmCVZCy4Q15KQwGIRZCyZATYZCXtbZBpooKTOKRAhKsEJLAkvoaZBxSXtTAVJ9Y"
 
-@app.route('/')
-def index():
-    return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
+@app.route('/', methods=['GET'])
+def verify():
+    if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
+        if request.args.get("hub.verify_token") == VERIFY_TOKEN:
+            return request.args["hub.challenge"], 200
+        else:
+            return "Verification token mismatch", 403
+    return "Hello world", 200
 
+@app.route('/', methods=['POST'])
+def webhook():
+    data = request.get_json()
+    if data['object'] == 'page':
+        for entry in data['entry']:
+            for messaging_event in entry['messaging']:
+                if messaging_event.get('message'):  
+                    sender_id = messaging_event['sender']['id']  
+                    message_text = messaging_event['message']['text']  
+                    send_message(sender_id, message_text)
 
-if __name__ == '__main__':
+    return "ok", 200
+
+def send_message(recipient_id, message_text):
+    params = {
+        "access_token": PAGE_ACCESS_TOKEN
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = {
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": message_text
+        }
+    }
+    requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, json=data)
+
+if __name__ == "__main__":
     app.run(debug=True, port=os.getenv("PORT", default=5000))
