@@ -24,10 +24,10 @@ def webhook():
             for messaging_event in entry['messaging']:
                 if messaging_event.get('message'):  
                     sender_id = messaging_event['sender']['id']  
-                    message_text = messaging_event['message']['text']  
-                    send_message(sender_id, message_text)
+                    send_message(sender_id, "Hello, World!")
 
     return "ok", 200
+
 
 def send_message(recipient_id, message_text):
     params = {
