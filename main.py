@@ -2,6 +2,7 @@ from flask import Flask, request
 import requests
 import os
 from OpenAIModel import OpenAI
+import time
 
 app = Flask(__name__)
 
@@ -25,9 +26,12 @@ def webhook():
             for messaging_event in entry['messaging']:
                 if messaging_event.get('message'):  
                     sender_id = messaging_event['sender']['id']  
-                    message_text = messaging_event['message']['text']  
+                    message_text = messaging_event['message']['text']
+                    send_typing_on(sender_id)
+                    time.sleep(2)
                     response = OpenAI(message_text)
                     send_message(sender_id, response)
+                    send_typing_off(sender_id)
 
     return "ok", 200
 
