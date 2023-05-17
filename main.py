@@ -1,6 +1,7 @@
 from flask import Flask, request
 import requests
 import os
+from OpenAIModel import OpenAIModel
 
 app = Flask(__name__)
 
