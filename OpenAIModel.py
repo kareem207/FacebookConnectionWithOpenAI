@@ -22,7 +22,7 @@ def OpenAI(Input):
         messages=[
                 {"role": "user", "content": promptTemplate},
             ],
-        temperature=0.0,
+        temperature=0.7,
         max_tokens=800,
         )
     return openAIResponse['choices'][0]['message']['content']
