@@ -25,4 +25,4 @@ def OpenAI(Input):
         temperature=0.0,
         max_tokens=800,
         )
-    return openAIResponse
+    return openAIResponse['choices'][0]['message']['content']
