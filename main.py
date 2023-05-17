@@ -2,7 +2,6 @@ from flask import Flask, request
 import requests
 import os
 from OpenAIModel import OpenAI
-import time
 
 app = Flask(__name__)
 
