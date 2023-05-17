@@ -27,11 +27,8 @@ def webhook():
                 if messaging_event.get('message'):  
                     sender_id = messaging_event['sender']['id']  
                     message_text = messaging_event['message']['text']
-                    send_typing_on(sender_id)
-                    time.sleep(2)
                     response = OpenAI(message_text)
                     send_message(sender_id, response)
-                    send_typing_off(sender_id)
 
     return "ok", 200
 
